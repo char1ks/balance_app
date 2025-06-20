@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  app1:
+    build: ./app
+    container_name: app1
+    environment:
+      - INSTANCE_ID=1
+      - REDIS_HOST=redis  # Добавляем переменную окружения для Redis
+    networks:
+      - my_network
+  app2:
+    build: ./app
+    container_name: app2
+    environment:
+      - INSTANCE_ID=2
+      - REDIS_HOST=redis  # Добавляем переменную окружения для Redis
+    networks:
+      - my_network
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app1
+      - app2
+    networks:
+      - my_network
+  frontend:
+    image: nginx:latest
+    container_name: frontend
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - nginx
+    networks:
+      - my_network
+  redis:  # Добавляем сервис Redis
+    image: redis:latest
+    container_name: redis
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
