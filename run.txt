@@ -1,0 +1,4 @@
+./switch_balancing.sh nginx_weighted    # Переключить на взвешенную балансировку
+./switch_balancing.sh nginx_sticky      # Переключить на липкие сессии
+./switch_balancing.sh nginx             # Переключить на round robin
+./switch_balancing.sh nginx_url         # Переключить на балансировку по URL
